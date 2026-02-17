@@ -27,6 +27,7 @@
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
+    "pkg": "npx @vscode/vsce package",
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
