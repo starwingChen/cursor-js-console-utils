@@ -1,0 +1,36 @@
+{
+  "name": "cursor-js-console-utils",
+  "displayName": "Cursor JS Console Utils",
+  "description": "Easily insert console.log statements for selected variable(s)",
+  "version": "0.1.0",
+  "publisher": "starwing",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": ["Other"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cursorJsConsoleUtils.insertLogStatement",
+        "title": "Insert console.log for selection"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "cursorJsConsoleUtils.insertLogStatement",
+        "key": "shift+alt+l",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "typescript": "^5.0.0"
+  }
+}
