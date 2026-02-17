@@ -4,6 +4,10 @@
   "description": "Easily insert console.log statements for selected variable(s)",
   "version": "0.1.0",
   "publisher": "starwing",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/starwingChen/cursor-js-console-utils.git"
+  },
   "engines": {
     "vscode": "^1.75.0"
   },

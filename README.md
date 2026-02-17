@@ -2,6 +2,8 @@
 
 在 Cursor / VS Code 中快速插入 `console.log` 语句。灵感来自 [vscode-js-console-utils](https://github.com/whtouche/vscode-js-console-utils)
 
+![](assets/example.gif)
+
 ## 功能
 
 - **无选区时**：在光标处插入空白 `console.log();`，光标停留在括号内，方便直接输入变量或表达式。
@@ -32,7 +34,7 @@
 |------|------|
 | 光标在某行，无选区，执行命令 | 在该位置插入 `console.log();` |
 | 选中变量 `userName`，执行命令 | 在该行下方插入 `console.log('userName: ', userName);` |
-| 多选 `a`、`b`、`c`（三处选区），执行命令 | 在最后选区所在行下方插入三行：`console.log('<var>: ', <var>);` 等 |
+| 多选 `a`、`b`、`c`（三处选区），执行命令 | 在最后选区所在行下方插入三行：`console.log('<var>: ', <var>);` 
 
 ## 注意事项
 
@@ -43,22 +45,6 @@
 ## 环境要求
 
 - **VS Code** 版本 ≥ 1.75.0（或兼容的 Cursor 版本）。
-
-## 开发与打包
-
-```bash
-# 安装依赖
-npm install
-
-# 编译 TypeScript
-npm run compile
-
-# 监听并自动编译
-npm run watch
-
-# 打包为 .vsix
-npm run pkg
-```
 
 ## 许可证
 
