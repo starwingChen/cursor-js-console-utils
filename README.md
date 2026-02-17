@@ -1,51 +1,53 @@
 # Cursor JS Console Utils
 
-在 Cursor / VS Code 中快速插入 `console.log` 语句。灵感来自 [vscode-js-console-utils](https://github.com/whtouche/vscode-js-console-utils)
+[中文说明](README.zh.md)
+
+Quickly insert `console.log` statements in Cursor / VS Code. Inspired by [vscode-js-console-utils](https://github.com/whtouche/vscode-js-console-utils).
 
 ![](assets/example.gif)
 
-## 功能
+## Features
 
-- **无选区时**：在光标处插入空白 `console.log();`，光标停留在括号内，方便直接输入变量或表达式。
-- **有选区时**：根据选中的文本，在**最后一处选区所在行的末尾**插入带标签的日志，格式为：
+- **No selection**: Inserts a blank `console.log();` at the cursor, with the cursor inside the parentheses so you can type a variable or expression directly.
+- **With selection**: Based on the selected text, inserts a labeled log at **the end of the line containing the last selection**, in the format:
   ```js
-  console.log('变量名: ', 变量名);
+  console.log('variableName: ', variableName);
   ```
-- **多选区**：支持多处选区，会按在文档中的先后顺序，一次性插入多行 `console.log`，每行对应一个选区。
+- **Multiple selections**: Supports multiple selections; inserts multiple `console.log` lines in document order, one per selection.
 
-## 安装
+## Installation
 
-### 从cursor拓展市场安装(推荐)
-搜索 Cursor JS Console Utils 并安装
+### From Cursor Extension Market (recommended)
+Search for **Cursor JS Console Utils** and install.
 
-### 从 VSIX 安装
+### From VSIX
 
-1. 在项目根目录执行：`npm run pkg`
-2. 在 VS Code / Cursor 中：按 **Ctrl+Shift+P** → 输入 **Install from vsix** → 选择生成的 `.vsix` 文件。
+1. In the project root, run: `npm run pkg`
+2. In VS Code / Cursor: press **Ctrl+Shift+P** → type **Install from vsix** → select the generated `.vsix` file.
 
-## 使用方式
+## Usage
 
-1. **命令面板**：`Ctrl+Shift+P`（Windows/Linux）或 `Cmd+Shift+P`（macOS），输入并选择 **“Insert console.log for selection”**。
-2. **快捷键**：`Shift+Alt+L`。
+1. **Command Palette**: `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (macOS), then type and select **"Insert console.log for selection"**.
+2. **Keyboard shortcut**: `Shift+Alt+L`.
 
-### 使用示例
+### Examples
 
-| 操作 | 结果 |
-|------|------|
-| 光标在某行，无选区，执行命令 | 在该位置插入 `console.log();` |
-| 选中变量 `userName`，执行命令 | 在该行下方插入 `console.log('userName: ', userName);` |
-| 多选 `a`、`b`、`c`（三处选区），执行命令 | 在最后选区所在行下方插入三行：`console.log('<var>: ', <var>);` 
+| Action | Result |
+|--------|--------|
+| Cursor on a line, no selection, run command | Inserts `console.log();` at that position |
+| Select variable `userName`, run command | Inserts `console.log('userName: ', userName);` at the end of that line |
+| Multi-select `a`, `b`, `c` (three selections), run command | Inserts three lines after the line of the last selection: `console.log('<var>: ', <var>);` |
 
-## 注意事项
+## Notes
 
-- **语言无关**：扩展不区分语言，任何文件类型下都会插入 `console.log`。若在非 JavaScript/TypeScript 文件中使用，请自行确认是否符合项目习惯（如删除或替换为对应语言的打印方式）。
-- **插入位置**：有选区时，所有日志行都插入在**最后一处选区所在行的行末**（换行后），不会在每处选区后分别插入。
-- **快捷键冲突**：`Shift+Alt+L` 可能与其他扩展或系统快捷键冲突，可在 **键盘快捷方式** 中搜索 `Insert console.log for selection` 自行修改。
+- **Language-agnostic**: The extension does not check file type; it inserts `console.log` in any file. If you use it in non-JavaScript/TypeScript files, ensure it fits your project (e.g. remove or replace with the appropriate print/log for that language).
+- **Insert position**: With selection(s), all log lines are inserted **at the end of the line containing the last selection** (after a newline), not after each selection.
+- **Shortcut conflicts**: `Shift+Alt+L` may conflict with other extensions or system shortcuts. You can search for **Insert console.log for selection** in **Keyboard Shortcuts** and change it.
 
-## 环境要求
+## Requirements
 
-- **VS Code** 版本 ≥ 1.75.0（或兼容的 Cursor 版本）。
+- **VS Code** version ≥ 1.75.0 (or a compatible Cursor version).
 
-## 许可证
+## License
 
-MIT License，详见 [LICENSE](LICENSE)。
+MIT License. See [LICENSE](LICENSE) for details.
