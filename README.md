@@ -48,6 +48,10 @@ Search for **Cursor JS Console Utils** and install.
 
 - **VS Code** version ≥ 1.75.0 (or a compatible Cursor version).
 
+## Feedback
+
+If this extension helps you, consider leaving a rating or review on the Cursor / VS Code marketplace — it helps others discover it:).
+
 ## License
 
 MIT License. See [LICENSE](LICENSE) for details.

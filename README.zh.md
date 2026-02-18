@@ -46,6 +46,10 @@
 
 - **VS Code** 版本 ≥ 1.75.0（或兼容的 Cursor 版本）。
 
+## 反馈
+
+如果你觉得这个扩展有用，欢迎在 Cursor / VS Code 扩展市场给个评分或评论，让更多人发现它:)。
+
 ## 许可证
 
 MIT License，详见 [LICENSE](LICENSE)。
