@@ -1,6 +1,6 @@
 # Cursor JS Console Utils
 
-在 Cursor / VS Code 中快速插入 `console.log` 语句。灵感来自 [vscode-js-console-utils](https://github.com/whtouche/vscode-js-console-utils)
+用 `shift+alt+L` 在 Cursor / VS Code 中快速插入 `console.log` 语句。灵感来自 [vscode-js-console-utils](https://github.com/whtouche/vscode-js-console-utils)
 
 ![](assets/example.gif)
 

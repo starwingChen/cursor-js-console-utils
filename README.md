@@ -2,7 +2,7 @@
 
 [中文说明](README.zh.md)
 
-Quickly insert `console.log` statements in Cursor / VS Code. Inspired by [vscode-js-console-utils](https://github.com/whtouche/vscode-js-console-utils).
+Use `Shift+Alt+L` to quickly insert `console.log` statements in Cursor / VS Code. Inspired by [vscode-js-console-utils](https://github.com/whtouche/vscode-js-console-utils).
 
 ![](assets/example.gif)
 
