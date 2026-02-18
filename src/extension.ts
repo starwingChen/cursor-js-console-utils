@@ -1,5 +1,15 @@
 import * as vscode from 'vscode';
 
+function indentForNextLine(lineText: string, editor: vscode.TextEditor): string {
+  let indent = lineText.match(/^\s*/)?.[0] ?? '';
+  if (/{\s*$/.test(lineText.trimEnd())) {
+    const tabSize = editor.options.tabSize as number;
+    const insertSpaces = editor.options.insertSpaces as boolean;
+    indent += insertSpaces ? ' '.repeat(tabSize) : '\t';
+  }
+  return indent;
+}
+
 function insertLogStatement(): void {
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
@@ -19,8 +29,30 @@ function insertLogStatement(): void {
 
   if (!hasNonEmptySelection) {
     const position = editor.selection.active;
-    const snippet = new vscode.SnippetString('console.log($0);');
-    editor.insertSnippet(snippet, position);
+    const line = document.lineAt(position.line);
+    const lineHasContent = line.text.trim().length > 0;
+
+    if (lineHasContent) {
+      const indent = indentForNextLine(line.text, editor);
+      const insertPosition = line.range.end;
+      const textToInsert = '\n' + indent + 'console.log();';
+      const edit = new vscode.WorkspaceEdit();
+      edit.insert(document.uri, insertPosition, textToInsert);
+      void vscode.workspace.applyEdit(edit).then((ok) => {
+        if (!ok) return;
+        const ed = vscode.window.activeTextEditor;
+        if (!ed || ed.document !== document) return;
+        const cursorPos = new vscode.Position(
+          position.line + 1,
+          indent.length + 'console.log('.length
+        );
+        ed.selection = new vscode.Selection(cursorPos, cursorPos);
+        ed.revealRange(new vscode.Range(cursorPos, cursorPos));
+      });
+    } else {
+      const snippet = new vscode.SnippetString('console.log($0);');
+      editor.insertSnippet(snippet, position);
+    }
     return;
   }
 
@@ -49,12 +81,7 @@ function insertLogStatement(): void {
 
   const lastItem = byDocumentOrder[byDocumentOrder.length - 1];
   const lastLine = document.lineAt(lastItem.selection.end.line);
-  let indent = lastLine.text.match(/^\s*/)?.[0] ?? '';
-  if (/{\s*$/.test(lastLine.text.trimEnd())) {
-    const tabSize = editor.options.tabSize as number;
-    const insertSpaces = editor.options.insertSpaces as boolean;
-    indent += insertSpaces ? ' '.repeat(tabSize) : '\t';
-  }
+  const indent = indentForNextLine(lastLine.text, editor);
   const insertPosition = lastLine.range.end;
   const block = byDocumentOrder
     .map(({ name }) => {

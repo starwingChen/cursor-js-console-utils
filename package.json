@@ -2,7 +2,7 @@
   "name": "cursor-js-console-utils",
   "displayName": "Cursor JS Console Utils",
   "description": "Easily insert console.log statements for selected variable(s)",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "starwing",
   "repository": {
     "type": "git",
