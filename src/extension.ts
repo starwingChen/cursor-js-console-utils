@@ -48,11 +48,18 @@ function insertLogStatement(): void {
   });
 
   const lastItem = byDocumentOrder[byDocumentOrder.length - 1];
-  const insertPosition = document.lineAt(lastItem.selection.end.line).range.end;
+  const lastLine = document.lineAt(lastItem.selection.end.line);
+  let indent = lastLine.text.match(/^\s*/)?.[0] ?? '';
+  if (/{\s*$/.test(lastLine.text.trimEnd())) {
+    const tabSize = editor.options.tabSize as number;
+    const insertSpaces = editor.options.insertSpaces as boolean;
+    indent += insertSpaces ? ' '.repeat(tabSize) : '\t';
+  }
+  const insertPosition = lastLine.range.end;
   const block = byDocumentOrder
     .map(({ name }) => {
       const escaped = escapeForSingleQuotedString(name);
-      return `console.log('${escaped}: ', ${name});`;
+      return indent + `console.log('${escaped}: ', ${name});`;
     })
     .join('\n');
 

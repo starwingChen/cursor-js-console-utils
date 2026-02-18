@@ -49,3 +49,7 @@
 ## 许可证
 
 MIT License，详见 [LICENSE](LICENSE)。
+
+## TODO
+- 当插入空log时，若当前行有内容，自动换行并插入下一行
+- 支持多语言（python、Java）
