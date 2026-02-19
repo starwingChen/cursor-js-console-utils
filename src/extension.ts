@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as path from 'path'
 
 function indentForNextLine(lineText: string, editor: vscode.TextEditor): string {
   let indent = lineText.match(/^\s*/)?.[0] ?? '';
@@ -10,7 +11,71 @@ function indentForNextLine(lineText: string, editor: vscode.TextEditor): string 
   return indent;
 }
 
-function insertLogStatement(): void {
+function getRelativePath(editor: vscode.TextEditor): string | undefined {
+  const workspaceFolder = vscode.workspace.getWorkspaceFolder(editor.document.uri);
+  if (workspaceFolder) {
+    const relative = path.relative(workspaceFolder.uri.fsPath, editor.document.fileName);
+    // posix format for better readability in log
+    return relative.replace(/\\/g, '/');
+  }
+  return undefined;
+}
+
+
+type BuildParams = {
+  name?: string;  // "a"
+  variable?: string; // a
+  logFile?: boolean;
+  logLine?: boolean;
+  line?: number;  
+};
+
+function buildConsolelogCode({ name, variable, logFile, logLine, line }: BuildParams): string {
+  const editor = vscode.window.activeTextEditor;
+  const args: string[] = [];
+
+  let prefix = '';
+  if (logFile && editor) {
+    const relativePath = getRelativePath(editor);
+    if (relativePath) {
+      prefix += relativePath;
+    } else {
+      prefix += path.basename(editor.document.fileName);
+    }
+  }
+  if (logLine) {
+    let lineNumber: number | undefined;
+    if (line !== undefined) {
+      lineNumber = line;                  
+    } else if (editor) {
+      lineNumber = editor.selection.active.line; 
+    }
+    if (lineNumber !== undefined) {
+      if (prefix) prefix += ' ';
+      prefix += `line ${lineNumber + 1}`;    
+    }
+  }
+
+  if (prefix) {
+    args.push(`"${prefix}"`);
+  }
+
+  if (variable) {
+    const label = name || variable;
+    args.push(`"${label}:"`);
+    args.push(variable);
+
+  } else if (args.length === 0) {
+    args.push('""');
+  }
+
+  return `console.log(${args.join(', ')});`;
+}
+
+
+function insertLogStatement(config: any): void {
+  const logFile = config.get("logFile", false)
+  const logLine = config.get("logLine", false)
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
     void vscode.window.showErrorMessage(
@@ -35,7 +100,7 @@ function insertLogStatement(): void {
     if (lineHasContent) {
       const indent = indentForNextLine(line.text, editor);
       const insertPosition = line.range.end;
-      const textToInsert = '\n' + indent + 'console.log();';
+      const textToInsert = '\n' + indent + buildConsolelogCode({ logFile, logLine, line: position.line });
       const edit = new vscode.WorkspaceEdit();
       edit.insert(document.uri, insertPosition, textToInsert);
       void vscode.workspace.applyEdit(edit).then((ok) => {
@@ -50,7 +115,7 @@ function insertLogStatement(): void {
         ed.revealRange(new vscode.Range(cursorPos, cursorPos));
       });
     } else {
-      const snippet = new vscode.SnippetString('console.log($0);');
+      const snippet = new vscode.SnippetString(buildConsolelogCode({variable:'$0', logFile, logLine}));
       editor.insertSnippet(snippet, position);
     }
     return;
@@ -84,9 +149,18 @@ function insertLogStatement(): void {
   const indent = indentForNextLine(lastLine.text, editor);
   const insertPosition = lastLine.range.end;
   const block = byDocumentOrder
-    .map(({ name }) => {
+    .map(({ name, selection }) => {
       const escaped = escapeForSingleQuotedString(name);
-      return indent + `console.log('${escaped}: ', ${name});`;
+      return (
+        indent +
+        buildConsolelogCode({
+          name: escaped,
+          variable: name,
+          logFile,
+          logLine,
+          line: selection.start.line, 
+        })
+      );
     })
     .join('\n');
 
@@ -108,9 +182,10 @@ function insertLogStatement(): void {
 }
 
 export function activate(context: vscode.ExtensionContext): void {
+  const config = vscode.workspace.getConfiguration()
   const insertLogStatementCmd = vscode.commands.registerCommand(
     'cursorJsConsoleUtils.insertLogStatement',
-    insertLogStatement
+    ()=>insertLogStatement(config),
   );
   context.subscriptions.push(insertLogStatementCmd);
 }
