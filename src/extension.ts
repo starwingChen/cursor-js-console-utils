@@ -65,8 +65,6 @@ function buildConsolelogCode({ name, variable, logFile, logLine, line }: BuildPa
     args.push(`"${label}:"`);
     args.push(variable);
 
-  } else if (args.length === 0) {
-    args.push('""');
   }
 
   return `console.log(${args.join(', ')});`;
@@ -115,7 +113,7 @@ function insertLogStatement(config: any): void {
         ed.revealRange(new vscode.Range(cursorPos, cursorPos));
       });
     } else {
-      const snippet = new vscode.SnippetString(buildConsolelogCode({variable:'$0', logFile, logLine}));
+      const snippet = new vscode.SnippetString(buildConsolelogCode({ variable:'$0', logFile, logLine }));
       editor.insertSnippet(snippet, position);
     }
     return;
